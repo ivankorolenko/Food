@@ -2,7 +2,9 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    // Main slider
+
+    // ===================== Main slider ==========================
+    // ============================================================
 
     const tabs = document.querySelectorAll('.tabheader__item'),
           tabsContent = document.querySelectorAll('.tabcontent'),
@@ -40,8 +42,10 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     });
+    
 
-    // Discount timer
+    // ==================== Discount timer ========================
+    // ============================================================
 
     const deadline = '2020-10-1',
           timer = document.querySelector('.timer');
@@ -65,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'seconds': seconds
         }
     }
-    
+
     function setTimer(endTime, parent) {
         const days = parent.querySelector('#days'),
               hours = parent.querySelector('#hours'),
@@ -83,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
             minutes.innerHTML = total.minutes;
             seconds.innerHTML = total.seconds;
 
-            if (total.total <= 0){
+            if (total.total <= 0) {
                 clearInterval(total);
             }
         }
@@ -91,7 +95,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     setTimer(deadline, timer);
 
-    // Modal window
+
+    // ==================== Modal window ==========================
+    // ============================================================
 
     const modalTrigger = document.querySelectorAll('[data-modal]'),
           modal = document.querySelector('.modal'),
@@ -100,14 +106,14 @@ document.addEventListener('DOMContentLoaded', () => {
     function showModal() {
         modal.classList.add('show');
         modal.classList.remove('hide');
-        document.body.style.overflow = 'hidden'; 
+        document.body.style.overflow = 'hidden';
         clearInterval(modalTimerId);
     }
 
     function hideModal() {
         modal.classList.add('hide');
         modal.classList.remove('show');
-        document.body.style.overflow = '';  
+        document.body.style.overflow = '';
     }
 
     function showModalByScroll() {
@@ -139,5 +145,61 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalTimerId = setTimeout(showModal, 5000);
 
     window.addEventListener('scroll', showModalByScroll);
+
+
+    // ================= Dinamic menu content =====================
+    // ============================================================
+
+    class Food {
+        constructor(parent, imgSrc, imgAlt, title, descr, cost) {
+            this.parent = document.querySelector(parent);
+            this.imgSrc = imgSrc;
+            this.imgAlt = imgAlt;
+            this.title = title;
+            this.descr = descr;
+            this.cost = cost;
+        }
+
+        render() {
+            this.parent.insertAdjacentHTML('beforeend', `
+            <div class="menu__item">
+                <img src="${this.imgSrc}" alt="${this.imgAlt}">
+                <h3 class="menu__item-subtitle">${this.title}</h3>
+                <div class="menu__item-descr">${this.descr}</div>
+                <div class="menu__item-divider"></div>
+                <div class="menu__item-price">
+                    <div class="menu__item-cost">Цена:</div>
+                    <div class="menu__item-total"><span>${this.cost}</span> грн/день</div>
+                </div>
+            </div>
+            `);
+        }
+    }
+
+    new Food(
+        '.menu__field .container', 
+        'img/tabs/vegy.jpg', 'vegy', 
+        'Меню "Фитнес"', 
+        'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!', 
+        229
+    ).render();
+
+    new Food(
+        '.menu__field .container', 
+        'img/tabs/elite.jpg', 
+        'elite', 
+        'Меню “Премиум”', 
+        'В меню “Премиум” мы используем не только красивый дизайн упаковки, но и качественное исполнение блюд. Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!', 
+        550
+    ).render();
+
+    new Food(
+        '.menu__field .container', 
+        'img/tabs/post.jpg', 
+        'post', 
+        'Меню "Постное"', 
+        'Меню “Постное” - это тщательный подбор ингредиентов: полное отсутствие продуктов животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное количество белков за счет тофу и импортных вегетарианских стейков.', 
+        430
+    ).render();
 
 });
