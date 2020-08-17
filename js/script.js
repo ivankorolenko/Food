@@ -93,38 +93,51 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Modal window
 
-    const modalButtons = document.querySelectorAll('[data-modal]'),
-          modalBlock = document.querySelector('.modal'),
-          closureButton = modalBlock.querySelector('.modal__close');
+    const modalTrigger = document.querySelectorAll('[data-modal]'),
+          modal = document.querySelector('.modal'),
+          closeModal = modal.querySelector('.modal__close');
 
     function showModal() {
-        modalBlock.classList.add('show');
-        modalBlock.classList.remove('hide');
+        modal.classList.add('show');
+        modal.classList.remove('hide');
         document.body.style.overflow = 'hidden'; 
+        clearInterval(modalTimerId);
     }
 
     function hideModal() {
-        modalBlock.classList.add('hide');
-        modalBlock.classList.remove('show');
+        modal.classList.add('hide');
+        modal.classList.remove('show');
         document.body.style.overflow = '';  
     }
 
-    modalButtons.forEach(item => {
+    function showModalByScroll() {
+        if (window.pageYOffset + document.documentElement.clientHeight >= 
+            document.documentElement.scrollHeight) {
+            showModal();
+            window.removeEventListener(showModalByScroll);
+        }
+    }
+
+    modalTrigger.forEach(item => {
         item.addEventListener('click', showModal);
     });
 
-    closureButton.addEventListener('click', hideModal);
+    closeModal.addEventListener('click', hideModal);
 
-    modalBlock.addEventListener('click', event => {
-        if (event.target === modalBlock) {
+    modal.addEventListener('click', event => {
+        if (event.target === modal) {
             hideModal();
         }
     });
 
     document.addEventListener('keydown', event => {
-        if (event.code === 'Escape' && modalBlock.classList.contains('show')) {
+        if (event.code === 'Escape' && modal.classList.contains('show')) {
             hideModal();
         }
     });
+    
+    const modalTimerId = setTimeout(showModal, 5000);
+
+    window.addEventListener('scroll', showModalByScroll);
 
 });
