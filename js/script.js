@@ -277,4 +277,9 @@ document.addEventListener('DOMContentLoaded', () => {
             prevModalDialog.classList.remove('hide');
         }, 4000);
     }
+
+    fetch('http://localhost:3000/menu')
+        .then(data => data.json())
+        .then(data => console.log(data))
+        .catch(console.log('Tы, походу, json сервер отключил'));
 });
