@@ -101,7 +101,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const modalTrigger = document.querySelectorAll('[data-modal]'),
           modal = document.querySelector('.modal');
-          // closeModal = modal.querySelector('.modal__close');
 
     function showModal() {
         modal.classList.add('show');
@@ -269,6 +268,51 @@ document.addEventListener('DOMContentLoaded', () => {
             prevModalDialog.classList.remove('hide');
         }, 4000);
     }
+
+
+    // ============= Offer slider 1-st implementation =============
+    // ============================================================
+
+    const prevSlide = document.querySelector('.offer__slider-prev'),
+          nextSlide = document.querySelector('.offer__slider-next'),
+          currentSlideNumber = document.querySelector('#current'),
+          totalSlideCount = document.querySelector('#total'),
+          slides = document.querySelectorAll('.offer__slide');   
+    let startSlider = 1;
+
+    totalSlideCount.textContent = (slides.length <= 9) ? '0' + slides.length : slides.length;
+
+    function setOfferSlide(slideNumber) {
+        let currentSlide;
+
+        slides.forEach(item => {
+            item.classList.remove('show');
+            item.classList.add('hide');
+        });
+
+        slides[slideNumber - 1].classList.remove('hide');
+        slides[slideNumber - 1].classList.add('show');
+
+        currentSlideNumber.textContent = (slideNumber <= 9) ? '0' + slideNumber : slideNumber;
+    }
+
+    setOfferSlide(startSlider);
+
+    nextSlide.addEventListener('click', () => {
+        if (startSlider === slides.length) {
+            startSlider = 0;
+        }
+
+        setOfferSlide(++startSlider);
+    });
+
+    prevSlide.addEventListener('click', () => {
+        if (startSlider === 1) {
+            startSlider = slides.length + 1;
+        }
+
+        setOfferSlide(--startSlider);
+    });
 
 
 });
