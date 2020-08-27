@@ -270,49 +270,97 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
-    // ============= Offer slider 1-st implementation =============
+    // ======================= Offer slider =======================
     // ============================================================
 
     const prevSlide = document.querySelector('.offer__slider-prev'),
           nextSlide = document.querySelector('.offer__slider-next'),
           currentSlideNumber = document.querySelector('#current'),
           totalSlideCount = document.querySelector('#total'),
-          slides = document.querySelectorAll('.offer__slide');   
-    let startSlider = 1;
+          slides = document.querySelectorAll('.offer__slide'),
+          slidesWrapper = document.querySelector('.offer__slider-wrapper'),
+          slidesField = document.querySelector('.offer__slider-inner'),
+          width = window.getComputedStyle(slidesWrapper).width;
 
-    totalSlideCount.textContent = (slides.length <= 9) ? '0' + slides.length : slides.length;
+    let startSlider = 1,
+        offset = 0;
 
-    function setOfferSlide(slideNumber) {
-        let currentSlide;
+    slidesField.style.width = 100 * slides.length + '%';
+    slidesField.style.display = 'flex';
+    slidesField.style.transition = '0.5s all';
 
-        slides.forEach(item => {
-            item.classList.remove('show');
-            item.classList.add('hide');
-        });
+    slidesWrapper.style.overflow = 'hidden';
 
-        slides[slideNumber - 1].classList.remove('hide');
-        slides[slideNumber - 1].classList.add('show');
+    slides.forEach(item => {
+        item.style.width = width;
+    });
 
-        currentSlideNumber.textContent = (slideNumber <= 9) ? '0' + slideNumber : slideNumber;
+    function changeSlide() {
+        currentSlideNumber.textContent = (startSlider <= 9) ? '0' + startSlider : startSlider;
+        slidesField.style.transform = `translateX(-${offset}px)`;
     }
 
-    setOfferSlide(startSlider);
+    totalSlideCount.textContent = (slides.length <= 9) ? '0' + slides.length : slides.length;
+    changeSlide();
 
     nextSlide.addEventListener('click', () => {
-        if (startSlider === slides.length) {
-            startSlider = 0;
+        if (offset == parseInt(width) * (slides.length - 1)) {
+            offset = 0;
+            startSlider = 1;
+        } else {
+            offset += parseInt(width);
+            startSlider++;
         }
 
-        setOfferSlide(++startSlider);
+        changeSlide();
     });
 
     prevSlide.addEventListener('click', () => {
-        if (startSlider === 1) {
-            startSlider = slides.length + 1;
+        if (offset == 0) {
+            offset = parseInt(width) * (slides.length - 1);
+            startSlider = slides.length;
+        } else {
+            offset -= parseInt(width);
+            startSlider--;
         }
 
-        setOfferSlide(--startSlider);
+        changeSlide();
     });
+
+
+    // totalSlideCount.textContent = (slides.length <= 9) ? '0' + slides.length : slides.length;
+
+    // function setOfferSlide(slideNumber) {
+    //     let currentSlide;
+
+    //     slides.forEach(item => {
+    //         item.classList.remove('show');
+    //         item.classList.add('hide');
+    //     });
+
+    //     slides[slideNumber - 1].classList.remove('hide');
+    //     slides[slideNumber - 1].classList.add('show');
+
+    //     currentSlideNumber.textContent = (slideNumber <= 9) ? '0' + slideNumber : slideNumber;
+    // }
+
+    // setOfferSlide(startSlider);
+
+    // nextSlide.addEventListener('click', () => {
+    //     if (startSlider === slides.length) {
+    //         startSlider = 0;
+    //     }
+
+    //     setOfferSlide(++startSlider);
+    // });
+
+    // prevSlide.addEventListener('click', () => {
+    //     if (startSlider === 1) {
+    //         startSlider = slides.length + 1;
+    //     }
+
+    //     setOfferSlide(--startSlider);
+    // });
 
 
 });
