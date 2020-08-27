@@ -273,7 +273,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // ======================= Offer slider =======================
     // ============================================================
 
-    const prevSlide = document.querySelector('.offer__slider-prev'),
+    const slider = document.querySelector('.offer__slider'),
+          prevSlide = document.querySelector('.offer__slider-prev'),
           nextSlide = document.querySelector('.offer__slider-next'),
           currentSlideNumber = document.querySelector('#current'),
           totalSlideCount = document.querySelector('#total'),
@@ -295,9 +296,40 @@ document.addEventListener('DOMContentLoaded', () => {
         item.style.width = width;
     });
 
+    slider.style.position = 'relative';
+
+    const indicators = document.createElement('ol');
+    indicators.classList.add('carousel-indicators');
+
+    slider.append(indicators);
+
+    for (let i = 0; i < slides.length; i++) {
+        const dot = document.createElement('li');
+        dot.setAttribute('data-slide-to', i + 1);
+        dot.classList.add('dot');
+        indicators.append(dot);
+    }
+
+    const allDots = document.querySelectorAll('.dot');
+
+    allDots.forEach((item, i) => {
+        item.addEventListener('click', () => {
+            startSlider = i + 1;
+            offset = i * parseInt(width);
+            changeSlide();
+            console.log(offset);
+        });
+    });
+
     function changeSlide() {
         currentSlideNumber.textContent = (startSlider <= 9) ? '0' + startSlider : startSlider;
         slidesField.style.transform = `translateX(-${offset}px)`;
+
+        allDots.forEach(item => {
+            item.style.opacity = '';
+        });
+
+        allDots[startSlider - 1].style.opacity = 1.0;
     }
 
     totalSlideCount.textContent = (slides.length <= 9) ? '0' + slides.length : slides.length;
