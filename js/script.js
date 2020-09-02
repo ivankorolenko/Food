@@ -359,48 +359,39 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // totalSlideCount.textContent = (slides.length <= 9) ? '0' + slides.length : slides.length;
-
-    // function setOfferSlide(slideNumber) {
-    //     let currentSlide;
-
-    //     slides.forEach(item => {
-    //         item.classList.remove('show');
-    //         item.classList.add('hide');
-    //     });
-
-    //     slides[slideNumber - 1].classList.remove('hide');
-    //     slides[slideNumber - 1].classList.add('show');
-
-    //     currentSlideNumber.textContent = (slideNumber <= 9) ? '0' + slideNumber : slideNumber;
-    // }
-
-    // setOfferSlide(startSlider);
-
-    // nextSlide.addEventListener('click', () => {
-    //     if (startSlider === slides.length) {
-    //         startSlider = 0;
-    //     }
-
-    //     setOfferSlide(++startSlider);
-    // });
-
-    // prevSlide.addEventListener('click', () => {
-    //     if (startSlider === 1) {
-    //         startSlider = slides.length + 1;
-    //     }
-
-    //     setOfferSlide(--startSlider);
-    // });
-
 
     // ======================== Calculator ========================
     // ============================================================
 
     const result = document.querySelector('.calculating__result span')
-    let sex = 'female', 
-        height, weight, age, 
+    let sex, height, weight, age, ratio;
+
+    if (localStorage.getItem('sex')) {
+        sex = localStorage.getItem('sex');
+    } else {
+        sex = 'female';
+        localStorage.setItem('sex', 'female');
+    }
+
+    if (localStorage.getItem('ratio')) {
+        ratio = localStorage.getItem('ratio');
+    } else {
         ratio = 1.375;
+        localStorage.setItem('ratio', 1.375);
+    }
+
+    function initLocalSettings (selector) {
+        const elements = document.querySelectorAll(selector);
+
+        elements.forEach(item => {
+            item.classList.remove('calculating__choose-item_active');
+
+            if (item.getAttribute('id') === localStorage.getItem('sex') ||
+                item.getAttribute('data-ratio') === localStorage.getItem('ratio')) {
+                item.classList.add('calculating__choose-item_active');
+            }
+        });
+    }
 
     function calcTocal() {
         if (!sex || !height || !weight || !age || !ratio) {
@@ -415,17 +406,21 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    initLocalSettings ('#gender div');
+    initLocalSettings ('.calculating__choose_big div');
     calcTocal();
 
-    function getStaticInformation(parentSelector) {
-        const elements = document.querySelectorAll(`${parentSelector} div`);
+    function getStaticInformation(selector) {
+        const elements = document.querySelectorAll(selector);
 
         elements.forEach(elem => {
             elem.addEventListener('click', event => {
                 if (event.target.getAttribute('data-ratio')) {
-                    ratio = event.target.getAttribute('data-ratio');
+                    ratio = +event.target.getAttribute('data-ratio');
+                    localStorage.setItem('ratio', +event.target.getAttribute('data-ratio'));
                 } else {
                     sex = event.target.getAttribute('id');
+                    localStorage.setItem('sex', event.target.getAttribute('id'));
                 }
 
                 elements.forEach(item => {
@@ -439,13 +434,19 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    getStaticInformation('#gender');
-    getStaticInformation('.calculating__choose_big');
+    getStaticInformation('#gender div');
+    getStaticInformation('.calculating__choose_big div');
 
     function getDynamicInformation(selector) {
         const input = document.querySelector(selector);
 
         input.addEventListener('input', () => {
+            if (input.value.match(/\D/g)) {
+                input.style.border = '1px solid red';
+            } else {
+                input.style.border = 'none';
+            }
+
             switch(input.getAttribute('id')) {
                 case 'height':
                     height = +input.value;
