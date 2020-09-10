@@ -85,7 +85,6 @@ function slider({container, slide, nextArrow, prevArrow, totalCounter, currentCo
             startSlider = i + 1;
             offset = i * parseInt(width);
             changeSlide();
-            console.log(offset);
         });
     });
 
