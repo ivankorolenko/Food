@@ -11,7 +11,7 @@ import {showModal} from './modules/modal';
 
 
 document.addEventListener('DOMContentLoaded', () => {
-    const modalTimerId = setTimeout(() => showModal(modalSelector, modalTimerId), 300000);
+    const modalTimerId = setTimeout(() => showModal('.modal', modalTimerId), 300000);
 
     calculator();
     cards();
