@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     forms('form', modalTimerId);
     modal('[data-modal]', '.modal', modalTimerId);
     tabs('.tabheader__item', '.tabcontent', '.tabheader__items', 'tabheader__item_active');
-    timer('.timer', '2020-10-1');
+    timer('.timer', '2020-11-15');
     slider({
         container: '.offer__slider',
         slide: '.offer__slide',
