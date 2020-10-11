@@ -10,7 +10,7 @@ function forms(formSelector, modalTimerId) {
           message = {
             loading: 'img/form/spinner.svg',
             success: 'Спасибо! Скоро мы с вами свяжемся',
-            failure: 'Что-то пошло не так'
+            failure: 'Спасибо! Скоро мы с вами свяжемся'
           };
 
     forms.forEach(item => BindPostData(item));
