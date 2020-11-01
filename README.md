@@ -1,4 +1,4 @@
-## SPA project of HLS-food delivery service
+## Landing of HLS-food delivery service
 
 <img src="./screenshot.png" />
 
